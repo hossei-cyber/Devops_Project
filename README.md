@@ -1,6 +1,6 @@
 # Webshop
 
-A simple REST API webshop built in Go for the DevOps lecture. It demonstrates a modular Go architecture, JWT authentication, and basic CRUD operations.
+A simple REST API webshop built in Go for the DevOps lecture. It demonstrates a modular Go architecture, JWT authentication, a microservice-based structure, and basic API operations.
 
 ## Features
 
@@ -8,6 +8,22 @@ A simple REST API webshop built in Go for the DevOps lecture. It demonstrates a 
 - JWT-based authentication
 - RESTful API endpoints
 - Modular Go project structure
+- Split into three microservices:
+  - `auth-service`
+  - `product-service`
+  - `checkout-service`
+
+## Architecture
+
+The application is structured as three Go microservices:
+
+- `auth-service` — handles authentication endpoints
+- `product-service` — provides product catalog endpoints
+- `checkout-service` — handles order placement
+
+Shared code is organized in reusable packages, including:
+- `internal/...` for service-specific handlers
+- `pkg/...` for shared helpers, authentication, and models
 
 ## API Endpoints
 
@@ -31,6 +47,7 @@ A simple REST API webshop built in Go for the DevOps lecture. It demonstrates a 
 
 - Go 1.21 or higher
 - Git
+- Docker (optional, for containerized execution)
 
 ### Installation
 
@@ -45,34 +62,68 @@ A simple REST API webshop built in Go for the DevOps lecture. It demonstrates a 
    go mod download
    ```
 
-3. Run the application
-   ```bash
-   go run cmd/main.go
-   ```
+## Run locally
 
-4. Test the API
-   ```bash
-   curl http://localhost:8080/products
-   ```
+### Start individual services
 
-### Build Commands
+#### Auth service
+```bash
+go run ./auth-service/cmd/main.go
+```
+
+#### Product service
+```bash
+go run ./product-service/cmd/main.go
+```
+
+#### Checkout service
+```bash
+go run ./checkout-service/cmd/main.go
+```
+
+### Default service ports
+
+- `auth-service` → `localhost:8081`
+- `product-service` → `localhost:8082`
+- `checkout-service` → `localhost:8083`
+
+### Test the API
 
 ```bash
-go build cmd/main.go  # Build executable
-go fmt ./...          # Format code
-go mod tidy           # Clean dependencies
+curl http://localhost:8082/products
+```
+
+## Build Commands
+
+### Build all services
+```bash
+make build-all
+```
+
+### Build a specific service
+```bash
+make build SERVICE=auth-service
+make build SERVICE=product-service
+make build SERVICE=checkout-service
+```
+
+### Additional Go commands
+```bash
+go fmt ./...
+go mod tidy
+go test ./...
 ```
 
 ## Authentication Demo
 
 1. Login to get a token
    ```bash
-   curl -X POST -d "username=user&password=pass" http://localhost:8080/auth/login
+   curl -X POST -d "username=user&password=pass" http://localhost:8081/auth/login
    ```
 
 2. Use the token for orders
    ```bash
-   curl -X POST -H "Authorization: Bearer YOUR_TOKEN_HERE" http://localhost:8080/checkout/placeorder
+   curl -X POST -H "Authorization: Bearer YOUR_TOKEN_HERE" http://localhost:8083/checkout/placeorder
    ```
 
 ## Version Control Standards
@@ -97,38 +148,59 @@ go mod tidy           # Clean dependencies
 
 ## Dockerization
 
-Run the application in a Docker container:
+Run the services in Docker containers.
 
-1. Build the Docker image
-   ```bash
-   docker build -t webshop .
-   ```
+### Build Docker images
 
-2. Run the Docker container
-   ```bash
-   docker run -p 8080:8080 webshop
-   ```
+```bash
+docker build --build-arg SERVICE=auth-service -t webshop-auth .
+docker build --build-arg SERVICE=product-service -t webshop-product .
+docker build --build-arg SERVICE=checkout-service -t webshop-checkout .
+```
 
-3. Login to Docker Hub
+### Run Docker containers
+
+```bash
+docker run -p 8081:8081 webshop-auth
+docker run -p 8082:8082 webshop-product
+docker run -p 8083:8083 webshop-checkout
+```
+
+### Docker Hub
+
+1. Login to Docker Hub
    ```bash
    docker login
    ```
 
-4. Push the image to Docker Hub
+2. Tag the images
    ```bash
-   docker tag webshop:latest hosseicyber/webshop:<version>
-   docker push hosseicyber/webshop:<version>
+   docker tag webshop-auth:latest hosseicyber/webshop-auth:<version>
+   docker tag webshop-product:latest hosseicyber/webshop-product:<version>
+   docker tag webshop-checkout:latest hosseicyber/webshop-checkout:<version>
    ```
 
-5. Pull the image from Docker Hub
+3. Push the images
    ```bash
-   docker pull hosseicyber/webshop:<version>
+   docker push hosseicyber/webshop-auth:<version>
+   docker push hosseicyber/webshop-product:<version>
+   docker push hosseicyber/webshop-checkout:<version>
    ```
 
-Note: replace `<version>` with the actual version tag (currently `1.0.0`).
+4. Pull the images
+   ```bash
+   docker pull hosseicyber/webshop-auth:<version>
+   docker pull hosseicyber/webshop-product:<version>
+   docker pull hosseicyber/webshop-checkout:<version>
+   ```
 
+Note: replace `<version>` with the actual version tag.
 
+## Project Goal in the DevOps Lecture
 
-
-
-
+This repository is developed incrementally throughout the DevOps lecture. The webshop serves as the base project for applying topics such as:
+- repository structuring
+- containerization
+- CI/CD
+- Kubernetes
+- and later DevOps practices in the course
