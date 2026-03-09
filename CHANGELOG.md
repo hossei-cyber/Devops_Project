@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.2.0](https://github.com/hossei-cyber/Devops_Project/compare/webshop-v2.1.0...webshop-v2.2.0) (2026-03-09)
+
+
+### Features
+
+* add Argo CD applications ([79c2e41](https://github.com/hossei-cyber/Devops_Project/commit/79c2e41ce70aa27345641ed1e51bbb382833a762))
+* add Argo CD applications ([1512800](https://github.com/hossei-cyber/Devops_Project/commit/151280088972bbd6a7c62d29c79556a268db0fb6))
+* argocd config ([53956ac](https://github.com/hossei-cyber/Devops_Project/commit/53956ac4a7393903a622f54c024286547fe31893))
+* restructure kubernetes manifests ([ddb2f76](https://github.com/hossei-cyber/Devops_Project/commit/ddb2f76388e143af6d184c35dba42800933f45b3))
+* restructure kubernetes manifests ([b6b4394](https://github.com/hossei-cyber/Devops_Project/commit/b6b439482e47bc9feac5a90d96551d739a32c84e))
+
+
+### Bug Fixes
+
+* tags to latest ([4beddaa](https://github.com/hossei-cyber/Devops_Project/commit/4beddaa3ee4943aa49cee227b1b33f4e5f0b53a2))
+
 ## [2.1.0](https://github.com/hossei-cyber/Devops_Project/compare/webshop-v2.0.0...webshop-v2.1.0) (2026-03-09)
 
 
