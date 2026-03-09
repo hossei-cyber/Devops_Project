@@ -10,8 +10,8 @@ namespace: webshop-prod
 
 images:
 - name: hosseicyber/webshop-auth
-  newTag: "1.0.0"
+  newTag: "latest"
 - name: hosseicyber/webshop-product
-  newTag: "1.0.0"
+  newTag: "latest"
 - name: hosseicyber/webshop-checkout
-  newTag: "1.0.0"
+  newTag: "latest"
