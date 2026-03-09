@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.2.0](https://github.com/hossei-cyber/Devops_Project/compare/webshop-v2.1.0...webshop-v2.2.0) (2026-03-09)
+
+
+### Features
+
+* add Argo CD applications ([79c2e41](https://github.com/hossei-cyber/Devops_Project/commit/79c2e41ce70aa27345641ed1e51bbb382833a762))
+* add Argo CD applications ([1512800](https://github.com/hossei-cyber/Devops_Project/commit/151280088972bbd6a7c62d29c79556a268db0fb6))
+
 ## [2.1.0](https://github.com/hossei-cyber/Devops_Project/compare/webshop-v2.0.0...webshop-v2.1.0) (2026-03-09)
 
 
