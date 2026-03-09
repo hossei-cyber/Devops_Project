@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/hossei-cyber/Devops_Project/compare/webshop-v2.0.0...webshop-v2.1.0) (2026-03-09)
+
+
+### Features
+
+* kubernetes setup and manifest ([6b963ae](https://github.com/hossei-cyber/Devops_Project/commit/6b963ae8cba0a5375cdeb1f65d477119cd2d1c16))
+
 ## [2.0.0](https://github.com/hossei-cyber/Devops_Project/compare/webshop-v1.0.0...webshop-v2.0.0) (2026-03-09)
 
 
