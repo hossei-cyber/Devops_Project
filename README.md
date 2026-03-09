@@ -229,31 +229,27 @@ The application is containerized and ready for Kubernetes deployment with separa
    minikube start
    ```
 
-2. Deploy to development environment
+2. Deploy to production environment
 
    ```bash
-   kubectl apply -k k8s/overlays/dev
+   kubectl apply -k k8s/overlays/production
    ```
 
 3. Check deployment status
 
    ```bash
-   kubectl get all -n webshop-dev
+   kubectl get all -n webshop-prod
    ```
 
 4. Access services via NodePort
 
    ```bash
-   minikube service dev-product-service-nodeport -n webshop-dev --url
+   minikube service prod-auth-service-nodeport -n webshop-prod --url
+   minikube service prod-product-service-nodeport -n webshop-prod --url
+   minikube service prod-checkout-service-nodeport -n webshop-prod --url
    ```
 
-### Environment Configurations
-
-#### Development Environment
-- **Namespace**: `webshop-dev`
-- **Replicas**: 1 per service (lightweight)
-- **Resources**: Minimal (32Mi RAM, 100m CPU)
-- **Access**: NodePorts 30081, 30082, 30083
+### Environment Configuration
 
 #### Production Environment
 - **Namespace**: `webshop-prod`
@@ -270,33 +266,151 @@ The application is containerized and ready for Kubernetes deployment with separa
 ### Deployment Commands
 
 ```bash
-# Deploy development
-kubectl apply -k k8s/overlays/dev
+# Deploy production environment
+kubectl apply -k k8s/overlays/production
 
-# Deploy production  
-kubectl apply -k k8s/overlays/prod
-
-# Delete environments
-kubectl delete -k k8s/overlays/dev
-kubectl delete -k k8s/overlays/prod
+# Delete production environment
+kubectl delete -k k8s/overlays/production
 ```
 
 ### Testing Kubernetes Services
 
 ```bash
 # Port forward for direct access
-kubectl port-forward -n webshop-dev svc/dev-product-service 8082:8082
+kubectl port-forward -n webshop-prod svc/prod-product-service 8082:8082
 
 # Test the API
 curl http://localhost:8082/products
 ```
 
-## Project Goal in the DevOps Lecture
+## ArgoCD GitOps Deployment
 
-This repository is developed incrementally throughout the DevOps lecture. The webshop serves as the base project for applying topics such as:
+ArgoCD provides GitOps-based continuous deployment for the webshop application. It automatically syncs your Kubernetes manifests from the Git repository to your cluster.
 
-- repository structuring
-- containerization
-- CI/CD
-- Kubernetes
-- and later DevOps practices in the course
+### Prerequisites
+
+- Kubernetes cluster (minikube for local development)
+- kubectl configured and connected to your cluster
+- Git repository with Kubernetes manifests (this repo)
+
+### Step 1: Install ArgoCD
+
+1. Create ArgoCD namespace and install ArgoCD:
+
+   ```bash
+   kubectl create namespace argocd
+   kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+   ```
+
+2. Wait for ArgoCD components to be ready:
+
+   ```bash
+   kubectl wait --for=condition=available --timeout=300s deployment/argocd-server -n argocd
+   ```
+
+### Step 2: Access ArgoCD UI
+
+1. **Option A: Port Forward (Recommended for local development)**
+
+   ```bash
+   kubectl port-forward svc/argocd-server -n argocd 8080:443
+   ```
+
+   Access ArgoCD at: `https://localhost:8080` (accept the self-signed certificate)
+
+2. **Option B: Expose via NodePort (Alternative)**
+
+   ```bash
+   kubectl patch svc argocd-server -n argocd -p '{"spec":{"type":"NodePort"}}'
+   minikube service argocd-server -n argocd --url
+   ```
+
+### Step 3: Get ArgoCD Admin Password
+
+```bash
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+```
+
+**Login credentials:**
+- Username: `admin`
+- Password: (output from the command above)
+
+### Step 4: Build and Push Docker Images
+
+Before deploying with ArgoCD, ensure your Docker images are built and available:
+
+1. **Build all service images with dynamic tags:**
+
+   ```bash
+   docker tag hosseicyber/webshop-auth:$IMAGE_TAG hosseicyber/webshop-auth:latest
+   docker tag hosseicyber/webshop-product:$IMAGE_TAG hosseicyber/webshop-product:latest
+   docker tag hosseicyber/webshop-checkout:$IMAGE_TAG hosseicyber/webshop-checkout:latest
+   ```
+
+2. **Login to Docker Hub:**
+
+   ```bash
+   docker login
+   ```
+
+3. **Push images to Docker Hub:**
+
+   ```bash
+   docker push hosseicyber/webshop-auth:latest
+   docker push hosseicyber/webshop-product:latest
+   docker push hosseicyber/webshop-checkout:latest
+   ```
+
+4. **For local Minikube development:**
+
+   ```bash
+   minikube image load hosseicyber/webshop-auth:latest
+   minikube image load hosseicyber/webshop-product:latest
+   minikube image load hosseicyber/webshop-checkout:latest
+   ```
+
+### Step 5: Deploy Applications with ArgoCD
+
+1. Apply the ArgoCD application manifests:
+
+   ```bash
+   kubectl apply -f argocd/webshop-prod-application.yaml
+   ```
+
+2. Verify applications are created:
+
+   ```bash
+   kubectl get applications -n argocd
+   ```
+
+### Step 6: Sync and Monitor Applications
+
+1. **Check application status:**
+
+   ```bash
+   kubectl get applications -n argocd
+   ```
+
+2. **View application details:**
+
+   ```bash
+   kubectl describe application webshop-prod -n argocd
+   ```
+
+### Application Configuration
+
+The ArgoCD applications are configured as follows:
+
+#### Production Environment
+- **Application Name**: `webshop-prod`
+- **Source**: `k8s/overlays/production`
+- **Destination**: `webshop-prod` namespace
+- **Sync Policy**: Automated with prune and self-heal
+
+### GitOps Workflow
+
+1. **Make changes** to your Kubernetes manifests in the `k8s/` directory
+2. **Commit and push** changes to Git repository
+3. **ArgoCD automatically detects** changes and syncs them to the cluster
+4. **Monitor deployments** via ArgoCD UI
+
