@@ -291,67 +291,12 @@ kubectl port-forward -n webshop-dev svc/dev-product-service 8082:8082
 curl http://localhost:8082/products
 ```
 
+## Project Goal in the DevOps Lecture
 
-## GitOps with Argo CD
+This repository is developed incrementally throughout the DevOps lecture. The webshop serves as the base project for applying topics such as:
 
-This project includes GitOps deployment using Argo CD for automated application delivery.
-
-### Prerequisites
-
-- Minikube cluster running
-- kubectl configured to access the cluster
-
-### Installing Argo CD
-
-1. Install Argo CD in your cluster:
-```bash
-kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-```
-
-2. Wait for Argo CD to be ready:
-```bash
-kubectl wait --for=condition=available --timeout=600s deployment/argocd-server -n argocd
-```
-
-3. Access Argo CD UI:
-```bash
-kubectl port-forward svc/argocd-server -n argocd 8080:443
-```
-
-4. Get the admin password:
-```bash
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-```
-
-### Deploying Applications with Argo CD
-
-The repository includes Argo CD applications for GitOps deployment:
-
-- **webshop-simple-application.yaml**: Contains both dev and prod environment deployments
-  - webshop-dev: Deploys to `webshop-dev` namespace using `k8s/overlays/dev`
-  - webshop-prod: Deploys to `webshop-prod` namespace using `k8s/overlays/prod`
-- **guestbook-application.yaml**: Example guestbook application for testing
-
-Apply the applications:
-```bash
-# Deploy webshop to dev and prod environments
-kubectl apply -f argocd/webshop-simple-application.yaml
-
-# Deploy guestbook example
-kubectl apply -f argocd/guestbook-application.yaml
-```
-
-### Monitoring with Argo CD
-
-1. Check application status:
-```bash
-kubectl get applications -n argocd
-```
-
-2. View application details in the UI at `http://localhost:8080`
-   - Username: `admin`
-   - Password: (from step 4 above)
-
-3. Applications will automatically sync when changes are pushed to the repository
-
+- repository structuring
+- containerization
+- CI/CD
+- Kubernetes
+- and later DevOps practices in the course
