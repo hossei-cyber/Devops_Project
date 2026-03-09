@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+metadata:
+  name: webshop-base
+
+resources:
+  - auth-service-deployment.yaml
+  - auth-service-service.yaml
+  - product-service-deployment.yaml
+  - product-service-service.yaml
+  - checkout-service-deployment.yaml
+  - checkout-service-service.yaml
+
+commonLabels:
+  project: webshop
+  version: v1.0.0

@@ -1,0 +1,28 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+metadata:
+  name: webshop-dev
+
+namespace: webshop-dev
+
+resources:
+  - ../../base
+  - namespace.yaml
+
+namePrefix: dev-
+
+commonLabels:
+  environment: dev
+
+patchesStrategicMerge:
+  - replica-patch.yaml
+  - resource-patch.yaml
+
+images:
+  - name: hosseicyber/webshop-auth
+    newTag: "dev-latest"
+  - name: hosseicyber/webshop-product  
+    newTag: "dev-latest"
+  - name: hosseicyber/webshop-checkout
+    newTag: "dev-latest"
