@@ -371,8 +371,6 @@ Before deploying with ArgoCD, ensure your Docker images are built and available:
 
 ### Step 5: Deploy Applications with ArgoCD
 
-#### Option A: Using kubectl (Recommended)
-
 1. Apply the ArgoCD application manifests:
 
    ```bash
