@@ -11,6 +11,11 @@
 # Test binary, built with `go test -c`
 *.test
 
+# Local build outputs
+bin/
+main
+webshop
+
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
