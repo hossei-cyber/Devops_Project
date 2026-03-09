@@ -211,6 +211,86 @@ docker run -p 8083:8083 webshop-checkout
 
 Note: replace `<version>` with the actual version tag.
 
+## Kubernetes Deployment
+
+The application is containerized and ready for Kubernetes deployment with separate environments.
+
+### Prerequisites
+
+- Kubernetes cluster (minikube for local development)
+- kubectl configured
+- Docker images built and pushed
+
+### Quick Start with Minikube
+
+1. Start minikube cluster
+
+   ```bash
+   minikube start
+   ```
+
+2. Deploy to development environment
+
+   ```bash
+   kubectl apply -k k8s/overlays/dev
+   ```
+
+3. Check deployment status
+
+   ```bash
+   kubectl get all -n webshop-dev
+   ```
+
+4. Access services via NodePort
+
+   ```bash
+   minikube service dev-product-service-nodeport -n webshop-dev --url
+   ```
+
+### Environment Configurations
+
+#### Development Environment
+- **Namespace**: `webshop-dev`
+- **Replicas**: 1 per service (lightweight)
+- **Resources**: Minimal (32Mi RAM, 100m CPU)
+- **Access**: NodePorts 30081, 30082, 30083
+
+#### Production Environment
+- **Namespace**: `webshop-prod`
+- **Replicas**: 3-5 per service (high availability)
+- **Resources**: Higher (128Mi RAM, 500m CPU)
+- **Access**: NodePorts 30081, 30082, 30083
+
+### Service Endpoints in Kubernetes
+
+- **Auth Service**: Port 8081 → NodePort 30081
+- **Product Service**: Port 8082 → NodePort 30082  
+- **Checkout Service**: Port 8083 → NodePort 30083
+
+### Deployment Commands
+
+```bash
+# Deploy development
+kubectl apply -k k8s/overlays/dev
+
+# Deploy production  
+kubectl apply -k k8s/overlays/prod
+
+# Delete environments
+kubectl delete -k k8s/overlays/dev
+kubectl delete -k k8s/overlays/prod
+```
+
+### Testing Kubernetes Services
+
+```bash
+# Port forward for direct access
+kubectl port-forward -n webshop-dev svc/dev-product-service 8082:8082
+
+# Test the API
+curl http://localhost:8082/products
+```
+
 ## Project Goal in the DevOps Lecture
 
 This repository is developed incrementally throughout the DevOps lecture. The webshop serves as the base project for applying topics such as:
