@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.0](https://github.com/hossei-cyber/Devops_Project/compare/webshop-v2.2.0...webshop-v2.3.0) (2026-03-16)
+
+
+### Features
+
+* added lgtm stack for observability ([cc9360f](https://github.com/hossei-cyber/Devops_Project/commit/cc9360f0513a1f61cd7f4f05904f7351f0b9964a))
+* added lgtm stack for observability ([6bbcb81](https://github.com/hossei-cyber/Devops_Project/commit/6bbcb8155a086646f659b2c7d9240f32f7a9d4a2))
+
 ## [2.2.0](https://github.com/hossei-cyber/Devops_Project/compare/webshop-v2.1.0...webshop-v2.2.0) (2026-03-09)
 
 
