@@ -1,6 +1,4 @@
 grafana:
-  adminUser: admin
-  adminPassword: pW5ddRoclJaUeYkZNtjaXncKOddE8ZuKsg0Hux8H
 
   dashboardProviders:
     dashboardproviders.yaml:
