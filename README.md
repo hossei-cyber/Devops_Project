@@ -46,7 +46,7 @@ Shared code is organized in reusable packages, including:
 
 ### Prerequisites
 
-- Go 1.21 or higher
+- Go 1.23 or higher
 - Git
 - Docker (optional, for containerized execution)
 
@@ -89,14 +89,13 @@ go run ./checkout-service/cmd/main.go
 
 ### Default service ports
 
-- `auth-service` → `localhost:8081`
-- `product-service` → `localhost:8082`
-- `checkout-service` → `localhost:8083`
+- Individual local runs default to `localhost:8080`
+- In Kubernetes, the services use ports `8081`, `8082`, and `8083`
 
 ### Test the API
 
 ```bash
-curl http://localhost:8082/products
+curl http://localhost:8080/products
 ```
 
 ## Build Commands
@@ -128,13 +127,13 @@ go test ./...
 1. Login to get a token
 
    ```bash
-   curl -X POST -d "username=user&password=pass" http://localhost:8081/auth/login
+   curl -X POST -d "username=user&password=pass" http://localhost:8080/auth/login
    ```
 
 2. Use the token for orders
 
    ```bash
-   curl -X POST -H "Authorization: Bearer YOUR_TOKEN_HERE" http://localhost:8083/checkout/placeorder
+   curl -X POST -H "Authorization: Bearer YOUR_TOKEN_HERE" http://localhost:8080/checkout/placeorder
    ```
 
 ## Version Control Standards
@@ -164,17 +163,17 @@ Run the services in Docker containers.
 ### Build Docker images
 
 ```bash
-docker build --build-arg SERVICE=auth-service -t webshop-auth .
-docker build --build-arg SERVICE=product-service -t webshop-product .
-docker build --build-arg SERVICE=checkout-service -t webshop-checkout .
+docker build --build-arg SERVICE=auth-service -t hosseicyber/webshop-auth:latest .
+docker build --build-arg SERVICE=product-service -t hosseicyber/webshop-product:latest .
+docker build --build-arg SERVICE=checkout-service -t hosseicyber/webshop-checkout:latest .
 ```
 
 ### Run Docker containers
 
 ```bash
-docker run -p 8081:8081 webshop-auth
-docker run -p 8082:8082 webshop-product
-docker run -p 8083:8083 webshop-checkout
+docker run -p 8081:8080 hosseicyber/webshop-auth:latest
+docker run -p 8082:8080 hosseicyber/webshop-product:latest
+docker run -p 8083:8080 hosseicyber/webshop-checkout:latest
 ```
 
 ### Docker Hub
@@ -188,9 +187,9 @@ docker run -p 8083:8083 webshop-checkout
 2. Tag the images
 
    ```bash
-   docker tag webshop-auth:latest hosseicyber/webshop-auth:<version>
-   docker tag webshop-product:latest hosseicyber/webshop-product:<version>
-   docker tag webshop-checkout:latest hosseicyber/webshop-checkout:<version>
+   docker tag hosseicyber/webshop-auth:latest hosseicyber/webshop-auth:<version>
+   docker tag hosseicyber/webshop-product:latest hosseicyber/webshop-product:<version>
+   docker tag hosseicyber/webshop-checkout:latest hosseicyber/webshop-checkout:<version>
    ```
 
 3. Push the images
@@ -339,12 +338,12 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 
 Before deploying with ArgoCD, ensure your Docker images are built and available:
 
-1. **Build all service images with dynamic tags:**
+1. **Build all service images:**
 
    ```bash
-   docker tag hosseicyber/webshop-auth:$IMAGE_TAG hosseicyber/webshop-auth:latest
-   docker tag hosseicyber/webshop-product:$IMAGE_TAG hosseicyber/webshop-product:latest
-   docker tag hosseicyber/webshop-checkout:$IMAGE_TAG hosseicyber/webshop-checkout:latest
+   docker build --build-arg SERVICE=auth-service -t hosseicyber/webshop-auth:latest .
+   docker build --build-arg SERVICE=product-service -t hosseicyber/webshop-product:latest .
+   docker build --build-arg SERVICE=checkout-service -t hosseicyber/webshop-checkout:latest .
    ```
 
 2. **Login to Docker Hub:**
