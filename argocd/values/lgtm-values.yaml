@@ -1,5 +1,6 @@
 grafana:
-
+  adminUser: admin
+  adminPassword: lgtm-demo-2026
   dashboardProviders:
     dashboardproviders.yaml:
       apiVersion: 1
