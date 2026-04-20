@@ -221,6 +221,42 @@ Kubernetes service test:
 
 ![Terminal output showing a successful curl request against the product service in Kubernetes](screenshots/kubernetes_curl.png)
 
+## VM Deployment
+
+For this task, a Vagrant VM was created and provisioned with Ansible to build and run the webshop product service.
+
+### Commands Used
+
+```bash
+vagrant up --provider=virtualbox
+vagrant provision
+vagrant ssh
+curl http://localhost:8080/products
+```
+
+### Result
+
+- A Vagrantfile was created for the VM setup
+- Project files were synced into the VM
+- Port forwarding from host `8080` to guest `8080` was configured
+- Ansible installed the dependencies inside the VM
+- The product service was built and started inside the VM
+- The service was reachable from the host with `curl`
+
+### Screenshots
+
+Vagrant provisioning with Ansible:
+
+![Terminal output showing the VM provisioning and Ansible setup](screenshots/vagrant_provision.png)
+
+VM access over SSH:
+
+![Terminal output showing a successful SSH session into the Vagrant VM](screenshots/vagrant_ssh.png)
+
+Forwarded service test:
+
+![Terminal output showing a successful curl request against the service running inside the VM](screenshots/vagrant_curl.png)
+
 ## ArgoCD GitOps Deployment
 
 For this task, Argo CD was installed in the local `minikube` cluster and used to deploy the webshop from this repository.
