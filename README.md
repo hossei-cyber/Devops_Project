@@ -367,3 +367,28 @@ Tempo replica count:
 Provisioned dashboard:
 
 ![Grafana dashboard Cluster CPU Overview](screenshots/cpu_cluster_overview.png)
+
+## DevSecOps Pipeline
+
+For this task, the existing GitHub Actions publish workflow was extended with container image scanning.
+
+### Commands Used
+
+The workflow in `.github/workflows/publish.yml` was updated to:
+
+- build the Docker image
+- generate an SBOM with Syft
+- scan the SBOM with Grype
+- push the Docker image afterwards
+
+### Result
+
+- The publish workflow includes a container image scanning step
+- An SBOM is generated with Syft
+- The SBOM is scanned with Grype for CVEs
+- The scan is executed after the Docker build step
+- The GitHub Actions workflow ran successfully
+
+### Screenshot
+
+![GitHub Actions publish workflow showing successful DevSecOps steps](screenshots/devSecOps.png)
