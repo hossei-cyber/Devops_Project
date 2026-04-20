@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.6.0](https://github.com/hossei-cyber/Devops_Project/compare/webshop-v2.5.0...webshop-v2.6.0) (2026-04-20)
+
+
+### Features
+
+* add Vagrant and Ansible VM deployment setup ([6625ef1](https://github.com/hossei-cyber/Devops_Project/commit/6625ef1fb911eb102befe748f964cf60575e704a))
+* add Vagrant and Ansible VM deployment setup ([69438a8](https://github.com/hossei-cyber/Devops_Project/commit/69438a899a862efe1310d4bcc4d958981b9eaebc))
+
 ## [2.5.0](https://github.com/hossei-cyber/Devops_Project/compare/webshop-v2.4.0...webshop-v2.5.0) (2026-04-20)
 
 
