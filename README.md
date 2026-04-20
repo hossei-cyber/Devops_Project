@@ -327,3 +327,43 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 ```
 
 ![Argo CD UI showing the synced and healthy webshop application](screenshots/gitOps_screen.png)
+
+## Observability Deployment
+
+For this task, an Argo CD `Application` was created to deploy the LGTM stack in the local `minikube` cluster via Helm.
+
+### Commands Used
+
+```bash
+kubectl apply -f argocd/lgtm-stack-application.yaml
+kubectl get applications -n argocd
+kubectl get all -n monitoring
+kubectl get statefulset -n monitoring lgtm-tempo-ingester
+```
+
+### Result
+
+- The application `lgtm-stack` was created
+- The LGTM stack was deployed in namespace `monitoring`
+- The application reached `Synced` and `Healthy`
+- The additional datasource `TestData` is available in Grafana
+- `lgtm-tempo-ingester` was running with `2/2` replicas
+- The dashboard `Cluster CPU Overview` was provisioned in Grafana
+
+### Screenshots
+
+Argo CD application overview:
+
+![Argo CD UI showing the synced and healthy LGTM stack](screenshots/lgtm_stack_argocd.png)
+
+Grafana data sources:
+
+![Grafana data sources showing Loki, Prometheus-K8s, Tempo, and TestData](screenshots/lgtm_stack.png)
+
+Tempo replica count:
+
+![Terminal output showing lgtm-tempo-ingester with 2/2 replicas](screenshots/lgtm_stack_terminal.png)
+
+Provisioned dashboard:
+
+![Grafana dashboard Cluster CPU Overview](screenshots/cpu_cluster_overview.png)
