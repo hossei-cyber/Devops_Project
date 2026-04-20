@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.4.0](https://github.com/hossei-cyber/Devops_Project/compare/webshop-v2.3.0...webshop-v2.4.0) (2026-04-20)
+
+
+### Features
+
+* add SBOM generation and image scanning to publish workflow ([1392c2b](https://github.com/hossei-cyber/Devops_Project/commit/1392c2bd5a1b518a850fd3b5443942b4419c7767))
+* add SBOM generation and image scanning to publish workflow ([450b954](https://github.com/hossei-cyber/Devops_Project/commit/450b954254f3e2ab45fff906752b0b3a59cb85aa))
+* align kubernetes setup and docs ([db8119b](https://github.com/hossei-cyber/Devops_Project/commit/db8119bcbbf08fb5606f0d2ec467b5d999af6f48))
+* publish split service images ([d753db3](https://github.com/hossei-cyber/Devops_Project/commit/d753db3d00add7c8c924e85b1480258a675b28cf))
+
+
+### Bug Fixes
+
+* correct Grafana Mimir datasource for LGTM stack ([94d0bc1](https://github.com/hossei-cyber/Devops_Project/commit/94d0bc1839f3e549136f85bb4b997a73b798ddb3))
+* pin Grafana admin credentials for stable Argo CD sync ([ea8e100](https://github.com/hossei-cyber/Devops_Project/commit/ea8e1003d4c7102d1b375272c7988c9cbbed0467))
+
 ## [2.3.0](https://github.com/hossei-cyber/Devops_Project/compare/webshop-v2.2.0...webshop-v2.3.0) (2026-03-16)
 
 
