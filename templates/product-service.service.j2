@@ -1,0 +1,14 @@
+[Unit]
+Description=Webshop product service
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/srv/webshop
+Environment=PORT=8080
+ExecStart=/usr/local/bin/product-service
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

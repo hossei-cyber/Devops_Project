@@ -1,0 +1,76 @@
+---
+- name: Provision webshop VM
+  hosts: all
+  become: true
+
+  vars:
+    app_dir: /srv/webshop
+    go_version: "1.23.7"
+    go_archive: "go{{ go_version }}.linux-arm64.tar.gz"
+    go_download_url: "https://go.dev/dl/{{ go_archive }}"
+    product_binary_path: /usr/local/bin/product-service
+
+  tasks:
+    - name: Install required system packages
+      ansible.builtin.apt:
+        name:
+          - curl
+          - tar
+        state: present
+        update_cache: true
+
+    - name: Remove OS-provided Go package if present
+      ansible.builtin.apt:
+        name: golang-go
+        state: absent
+        purge: true
+
+    - name: Download Go toolchain
+      ansible.builtin.get_url:
+        url: "{{ go_download_url }}"
+        dest: "/tmp/{{ go_archive }}"
+        mode: "0644"
+
+    - name: Remove previous Go installation
+      ansible.builtin.file:
+        path: /usr/local/go
+        state: absent
+
+    - name: Extract Go toolchain
+      ansible.builtin.unarchive:
+        src: "/tmp/{{ go_archive }}"
+        dest: /usr/local
+        remote_src: true
+
+    - name: Ensure Go binary path is available system-wide
+      ansible.builtin.copy:
+        dest: /etc/profile.d/go.sh
+        mode: "0644"
+        content: |
+          export PATH=$PATH:/usr/local/go/bin
+
+    - name: Download Go module dependencies
+      ansible.builtin.command:
+        cmd: /usr/local/go/bin/go mod download
+        chdir: "{{ app_dir }}"
+
+    - name: Build product service binary
+      ansible.builtin.command:
+        cmd: /usr/local/go/bin/go build -o {{ product_binary_path }} ./product-service/cmd/main.go
+        chdir: "{{ app_dir }}"
+
+    - name: Install product service systemd unit
+      ansible.builtin.template:
+        src: templates/product-service.service.j2
+        dest: /etc/systemd/system/product-service.service
+        mode: "0644"
+
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: true
+
+    - name: Enable and restart product service
+      ansible.builtin.systemd:
+        name: product-service
+        enabled: true
+        state: restarted

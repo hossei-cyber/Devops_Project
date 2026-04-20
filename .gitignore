@@ -38,3 +38,9 @@ slides
 *.tfvars
 crash.log
 .terraform.lock.hcl
+
+# Vagrant
+.vagrant/
+
+# macOS
+.DS_Store

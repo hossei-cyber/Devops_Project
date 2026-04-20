@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.0](https://github.com/hossei-cyber/Devops_Project/compare/webshop-v2.4.0...webshop-v2.5.0) (2026-04-20)
+
+
+### Features
+
+* add Azure OpenTofu configuration for resource group and AKS ([3be6c1c](https://github.com/hossei-cyber/Devops_Project/commit/3be6c1c53bc0ceaf36c2e3f0c9d80c245fb8e2d8))
+
 ## [2.4.0](https://github.com/hossei-cyber/Devops_Project/compare/webshop-v2.3.0...webshop-v2.4.0) (2026-04-20)
 
 
