@@ -30,3 +30,11 @@ go.work.sum
 .env
 
 slides
+
+# OpenTofu / Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
+.terraform.lock.hcl

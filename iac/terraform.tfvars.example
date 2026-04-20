@@ -1,0 +1,4 @@
+location = "swedencentral"
+project_name = "webshop-student"
+node_count   = 1
+vm_size      = "Standard_B2s_v2"
