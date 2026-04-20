@@ -33,6 +33,34 @@ jobs:
           VERSION=${GITHUB_REF#refs/tags/webshop-v}
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Build Docker image for scanning
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          build-args: |
+            SERVICE=${{ matrix.service }}
+          load: true
+          push: false
+          tags: hosseicyber/${{ matrix.service }}:${{ steps.version.outputs.version }}
+          platforms: linux/amd64
+
+      - name: Generate SBOM with Syft
+        uses: anchore/sbom-action@v0
+        with:
+          image: hosseicyber/${{ matrix.service }}:${{ steps.version.outputs.version }}
+          format: cyclonedx-json
+          artifact-name: ${{ matrix.service }}-sbom.cdx.json
+          output-file: ${{ matrix.service }}-sbom.cdx.json
+          upload-artifact: true
+          upload-release-assets: false
+
+      - name: Scan SBOM with Grype
+        uses: anchore/scan-action@v7
+        with:
+          sbom: ${{ matrix.service }}-sbom.cdx.json
+          fail-build: false
+          severity-cutoff: critical
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
