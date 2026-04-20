@@ -115,8 +115,13 @@ grafana:
         - name: Prometheus-K8s
           uid: prom
           type: prometheus
-          url: http://monitoring-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090
+          url: http://{{ .Release.Name }}-mimir-nginx/prometheus
           isDefault: true
+        - name: TestData
+          uid: testdata
+          type: testdata
+          access: proxy
+          isDefault: false
         - name: Tempo
           uid: tempo
           type: tempo
@@ -131,11 +136,6 @@ grafana:
               datasourceUid: prom
             serviceMap:
               datasourceUid: prom
-        - name: TestData
-          uid: testdata
-          type: testdata
-          access: proxy
-          isDefault: false
 
 tempo:
   ingester:
