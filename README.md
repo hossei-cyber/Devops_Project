@@ -110,9 +110,9 @@ make build-all
 ### Build a specific service
 
 ```bash
-make build SERVICE=auth-service
-make build SERVICE=product-service
-make build SERVICE=checkout-service
+make build service=auth-service
+make build service=product-service
+make build service=checkout-service
 ```
 
 ### Additional Go commands
@@ -241,27 +241,27 @@ The application is containerized and ready for Kubernetes deployment with separa
    kubectl get all -n webshop-prod
    ```
 
-4. Access services via NodePort
+4. Access services via port forwarding
 
    ```bash
-   minikube service prod-auth-service-nodeport -n webshop-prod --url
-   minikube service prod-product-service-nodeport -n webshop-prod --url
-   minikube service prod-checkout-service-nodeport -n webshop-prod --url
+   kubectl port-forward -n webshop-prod svc/prod-auth-service 8081:8081
+   kubectl port-forward -n webshop-prod svc/prod-product-service 8082:8082
+   kubectl port-forward -n webshop-prod svc/prod-checkout-service 8083:8083
    ```
 
 ### Environment Configuration
 
 #### Production Environment
 - **Namespace**: `webshop-prod`
-- **Replicas**: 3-5 per service (high availability)
+- **Replicas**: auth `1`, product `2`, checkout `3`
 - **Resources**: Higher (128Mi RAM, 500m CPU)
-- **Access**: NodePorts 30081, 30082, 30083
+- **Access**: ClusterIP services inside the cluster
 
 ### Service Endpoints in Kubernetes
 
-- **Auth Service**: Port 8081 → NodePort 30081
-- **Product Service**: Port 8082 → NodePort 30082  
-- **Checkout Service**: Port 8083 → NodePort 30083
+- **Auth Service**: `prod-auth-service:8081`
+- **Product Service**: `prod-product-service:8082`
+- **Checkout Service**: `prod-checkout-service:8083`
 
 ### Deployment Commands
 
@@ -374,7 +374,7 @@ Before deploying with ArgoCD, ensure your Docker images are built and available:
 1. Apply the ArgoCD application manifests:
 
    ```bash
-   kubectl apply -f argocd/webshop-prod-application.yaml
+   kubectl apply -f argocd/webshop-application.yaml
    ```
 
 2. Verify applications are created:
@@ -413,4 +413,3 @@ The ArgoCD applications are configured as follows:
 2. **Commit and push** changes to Git repository
 3. **ArgoCD automatically detects** changes and syncs them to the cluster
 4. **Monitor deployments** via ArgoCD UI
-
