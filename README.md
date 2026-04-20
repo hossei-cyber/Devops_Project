@@ -158,57 +158,36 @@ go test ./...
 
 ## Dockerization
 
-Run the services in Docker containers.
+For this task, the webshop services were containerized with Docker and published to Docker Hub.
 
-### Build Docker images
+### Commands Used
 
 ```bash
 docker build --build-arg SERVICE=auth-service -t hosseicyber/webshop-auth:latest .
 docker build --build-arg SERVICE=product-service -t hosseicyber/webshop-product:latest .
 docker build --build-arg SERVICE=checkout-service -t hosseicyber/webshop-checkout:latest .
-```
 
-### Run Docker containers
-
-```bash
 docker run -p 8081:8080 hosseicyber/webshop-auth:latest
 docker run -p 8082:8080 hosseicyber/webshop-product:latest
 docker run -p 8083:8080 hosseicyber/webshop-checkout:latest
+
+docker login
+docker push hosseicyber/webshop-auth:latest
+docker push hosseicyber/webshop-product:latest
+docker push hosseicyber/webshop-checkout:latest
 ```
 
-### Docker Hub
+### Result
 
-1. Login to Docker Hub
+- A Dockerfile was created for the webshop services
+- Docker images were built successfully
+- The images were available locally
+- The application could be started as a container
+- The images were published to Docker Hub
 
-   ```bash
-   docker login
-   ```
+### Screenshot
 
-2. Tag the images
-
-   ```bash
-   docker tag hosseicyber/webshop-auth:latest hosseicyber/webshop-auth:<version>
-   docker tag hosseicyber/webshop-product:latest hosseicyber/webshop-product:<version>
-   docker tag hosseicyber/webshop-checkout:latest hosseicyber/webshop-checkout:<version>
-   ```
-
-3. Push the images
-
-   ```bash
-   docker push hosseicyber/webshop-auth:<version>
-   docker push hosseicyber/webshop-product:<version>
-   docker push hosseicyber/webshop-checkout:<version>
-   ```
-
-4. Pull the images
-
-   ```bash
-   docker pull hosseicyber/webshop-auth:<version>
-   docker pull hosseicyber/webshop-product:<version>
-   docker pull hosseicyber/webshop-checkout:<version>
-   ```
-
-Note: replace `<version>` with the actual version tag.
+![Docker build, local images, and container run for the webshop service](screenshots/containerization.png)
 
 ## Kubernetes Deployment
 
