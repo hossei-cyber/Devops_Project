@@ -191,75 +191,35 @@ docker push hosseicyber/webshop-checkout:latest
 
 ## Kubernetes Deployment
 
-The application is containerized and ready for Kubernetes deployment with separate environments.
+For this task, the webshop backend was deployed to a local Kubernetes cluster with `minikube`.
 
-### Prerequisites
-
-- Kubernetes cluster (minikube for local development)
-- kubectl configured
-- Docker images built and pushed
-
-### Quick Start with Minikube
-
-1. Start minikube cluster
-
-   ```bash
-   minikube start
-   ```
-
-2. Deploy to production environment
-
-   ```bash
-   kubectl apply -k k8s/overlays/production
-   ```
-
-3. Check deployment status
-
-   ```bash
-   kubectl get all -n webshop-prod
-   ```
-
-4. Access services via port forwarding
-
-   ```bash
-   kubectl port-forward -n webshop-prod svc/prod-auth-service 8081:8081
-   kubectl port-forward -n webshop-prod svc/prod-product-service 8082:8082
-   kubectl port-forward -n webshop-prod svc/prod-checkout-service 8083:8083
-   ```
-
-### Environment Configuration
-
-#### Production Environment
-- **Namespace**: `webshop-prod`
-- **Replicas**: auth `1`, product `2`, checkout `3`
-- **Resources**: Higher (128Mi RAM, 500m CPU)
-- **Access**: ClusterIP services inside the cluster
-
-### Service Endpoints in Kubernetes
-
-- **Auth Service**: `prod-auth-service:8081`
-- **Product Service**: `prod-product-service:8082`
-- **Checkout Service**: `prod-checkout-service:8083`
-
-### Deployment Commands
+### Commands Used
 
 ```bash
-# Deploy production environment
+minikube start
 kubectl apply -k k8s/overlays/production
-
-# Delete production environment
-kubectl delete -k k8s/overlays/production
-```
-
-### Testing Kubernetes Services
-
-```bash
-# Port forward for direct access
+kubectl get all -n webshop-prod
 kubectl port-forward -n webshop-prod svc/prod-product-service 8082:8082
-
-# Test the API
 curl http://localhost:8082/products
 ```
+
+### Result
+
+- A local Kubernetes cluster was started with `minikube`
+- Deployment and Service manifests were applied
+- The webshop was deployed in namespace `webshop-prod`
+- The product service was reachable through port forwarding
+- The API responded successfully
+
+### Screenshots
+
+Minikube cluster startup:
+
+![Terminal output showing the local minikube cluster startup](screenshots/minikube.png)
+
+Kubernetes service test:
+
+![Terminal output showing a successful curl request against the product service in Kubernetes](screenshots/kubernetes_curl.png)
 
 ## ArgoCD GitOps Deployment
 
