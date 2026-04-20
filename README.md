@@ -1,140 +1,66 @@
 # Webshop
 
-A simple REST API webshop built in Go for the DevOps lecture. It demonstrates a modular Go architecture, JWT authentication, a microservice-based structure, and basic API operations.
+A simple Go webshop project for the DevOps lecture. The application is split into three backend services and was used across the course tasks for Docker, Kubernetes, GitOps, observability, DevSecOps, IaC, and VM deployment.
 
-## Features
+## Table of Contents
 
-- Product catalog with self-care items
-- JWT-based authentication
-- RESTful API endpoints
-- Modular Go project structure
-- Split into three microservices:
-  - `auth-service`
-  - `product-service`
-  - `checkout-service`
+- [App](#app)
+- [Version Control Standards](#version-control-standards)
+- [CI/CD Pipeline](#cicd-pipeline)
+- [Dockerization](#dockerization)
+- [Kubernetes Deployment](#kubernetes-deployment)
+- [VM Deployment](#vm-deployment)
+- [ArgoCD GitOps Deployment](#argocd-gitops-deployment)
+- [Observability Deployment](#observability-deployment)
+- [DevSecOps Pipeline](#devsecops-pipeline)
+- [Infrastructure as Code](#infrastructure-as-code)
 
-## Architecture
+---
 
-The application is structured as three Go microservices:
+## App
 
-- `auth-service` — handles authentication endpoints
-- `product-service` — provides product catalog endpoints
-- `checkout-service` — handles order placement
+### Services
 
-Shared code is organized in reusable packages, including:
+- `auth-service` handles login and logout
+- `product-service` provides the product catalog
+- `checkout-service` handles order placement
 
-- `internal/...` for service-specific handlers
-- `pkg/...` for shared helpers, authentication, and models
-
-## API Endpoints
-
-### Authentication
+### API Endpoints
 
 - `POST /auth/login` — User login (username: `user`, password: `pass`)
 - `POST /auth/logout` — User logout
-
-### Products
-
 - `GET /products` — List all products
 - `GET /products/{id}` — Get product details
-
-### Orders
-
 - `POST /checkout/placeorder` — Place order (requires authentication)
 
-## Getting Started
+### Local Run
 
-### Prerequisites
-
+#### Prerequisites
 - Go 1.23 or higher
 - Git
 - Docker (optional, for containerized execution)
 
-### Installation
-
-1. Clone the repository
-
-   ```bash
-   git clone https://github.com/hossei-cyber/Devops_Project.git
-   cd Devops_Project
-   ```
-
-2. Install dependencies
-
-   ```bash
-   go mod download
-   ```
-
-## Run locally
-
-### Start individual services
-
-#### Auth service
+#### Setup
 
 ```bash
-go run ./auth-service/cmd/main.go
+git clone https://github.com/hossei-cyber/Devops_Project.git
+cd Devops_Project
+go mod download
 ```
 
-#### Product service
+#### Start a service
 
 ```bash
 go run ./product-service/cmd/main.go
 ```
 
-#### Checkout service
-
-```bash
-go run ./checkout-service/cmd/main.go
-```
-
-### Default service ports
-
-- Individual local runs default to `localhost:8080`
-- In Kubernetes, the services use ports `8081`, `8082`, and `8083`
-
-### Test the API
+#### Test
 
 ```bash
 curl http://localhost:8080/products
 ```
 
-## Build Commands
-
-### Build all services
-
-```bash
-make build-all
-```
-
-### Build a specific service
-
-```bash
-make build service=auth-service
-make build service=product-service
-make build service=checkout-service
-```
-
-### Additional Go commands
-
-```bash
-go fmt ./...
-go mod tidy
-go test ./...
-```
-
-## Authentication Demo
-
-1. Login to get a token
-
-   ```bash
-   curl -X POST -d "username=user&password=pass" http://localhost:8080/auth/login
-   ```
-
-2. Use the token for orders
-
-   ```bash
-   curl -X POST -H "Authorization: Bearer YOUR_TOKEN_HERE" http://localhost:8080/checkout/placeorder
-   ```
+---
 
 ## Version Control Standards
 
@@ -155,6 +81,26 @@ go test ./...
 - Bug fixes: `fix: resolve bug description`
 - Documentation: `docs: update documentation for feature`
 - Refactoring: `refactor: improve code structure`
+
+---
+
+## CI/CD Pipeline
+
+For this task, GitHub Actions workflows were configured for continuous integration and continuous delivery.
+
+### Files Used
+
+- `.github/workflows/go.yml`
+- `.github/workflows/publish.yml`
+- `.github/workflows/release-please.yml`
+
+### Result
+
+- The CI workflow builds and tests the Go project on pushes and pull requests to `main`
+- The publish workflow builds and publishes Docker images for all webshop services on version tags
+- The release workflow automates versioning and release preparation on `main`
+
+---
 
 ## Dockerization
 
@@ -189,6 +135,8 @@ docker push hosseicyber/webshop-checkout:latest
 
 ![Docker build, local images, and container run for the webshop service](screenshots/containerization.png)
 
+---
+
 ## Kubernetes Deployment
 
 For this task, the webshop backend was deployed to a local Kubernetes cluster with `minikube`.
@@ -220,6 +168,8 @@ Minikube cluster startup:
 Kubernetes service test:
 
 ![Terminal output showing a successful curl request against the product service in Kubernetes](screenshots/kubernetes_curl.png)
+
+---
 
 ## VM Deployment
 
@@ -256,6 +206,8 @@ VM access over SSH:
 Forwarded service test:
 
 ![Terminal output showing a successful curl request against the service running inside the VM](screenshots/vagrant_curl.png)
+
+---
 
 ## ArgoCD GitOps Deployment
 
@@ -303,6 +255,8 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 
 ![Argo CD UI showing the synced and healthy webshop application](screenshots/gitOps_screen.png)
 
+---
+
 ## Observability Deployment
 
 For this task, an Argo CD `Application` was created to deploy the LGTM stack in the local `minikube` cluster via Helm.
@@ -343,6 +297,8 @@ Provisioned dashboard:
 
 ![Grafana dashboard Cluster CPU Overview](screenshots/cpu_cluster_overview.png)
 
+---
+
 ## DevSecOps Pipeline
 
 For this task, the existing GitHub Actions publish workflow was extended with container image scanning.
@@ -367,6 +323,8 @@ The workflow in `.github/workflows/publish.yml` was updated to:
 ### Screenshot
 
 ![GitHub Actions publish workflow showing successful DevSecOps steps](screenshots/devSecOps.png)
+
+---
 
 ## Infrastructure as Code
 
