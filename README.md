@@ -392,3 +392,41 @@ The workflow in `.github/workflows/publish.yml` was updated to:
 ### Screenshot
 
 ![GitHub Actions publish workflow showing successful DevSecOps steps](screenshots/devSecOps.png)
+
+## Infrastructure as Code
+
+For this task, OpenTofu was used to provision Azure infrastructure for the webshop.
+
+### Commands Used
+
+```bash
+az login
+
+cd iac
+tofu init
+tofu validate
+tofu plan
+tofu apply
+tofu destroy
+```
+
+### Result
+
+- OpenTofu configuration was created for Azure
+- A resource group and an AKS cluster were provisioned
+- The Azure region was configured through variables
+- The created infrastructure was visible in the Azure Portal
+
+### Screenshots
+
+OpenTofu initialization and validation:
+
+![OpenTofu terminal output showing initialization and validation](screenshots/tofu_terminal.png)
+
+AKS cluster overview in Azure:
+
+![Azure Portal showing the AKS cluster overview](screenshots/azure_ask_view.png)
+
+AKS-managed resource group in Azure:
+
+![Azure Portal showing the AKS-managed resource group and related resources](screenshots/azure_MC_view.png)
