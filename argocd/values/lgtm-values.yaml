@@ -77,7 +77,7 @@ grafana:
                 },
                 "targets": [
                   {
-                    "expr": "100 * sum(rate(node_cpu_seconds_total{mode!=\"idle\"}[5m])) / sum(machine_cpu_cores)",
+                    "expr": "100 * sum by (service) (label_replace(rate(container_cpu_usage_seconds_total{namespace=\"webshop-prod\"}[5m]), \"service\", \"$1\", \"pod\", \"^(prod-(auth|product|checkout)-service)-.*$\")) / scalar(sum(machine_cpu_cores))",
                     "legendFormat": "Cluster CPU",
                     "refId": "A"
                   }
