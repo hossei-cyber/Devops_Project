@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.6.1](https://github.com/hossei-cyber/Devops_Project/compare/webshop-v2.6.0...webshop-v2.6.1) (2026-04-27)
+
+
+### Bug Fixes
+
+* configure lgtm dashboard datasource ([e8b203b](https://github.com/hossei-cyber/Devops_Project/commit/e8b203bd470be03347d1cd9cdff1661880220d18))
+* correct lgtm cpu dashboard query ([192779b](https://github.com/hossei-cyber/Devops_Project/commit/192779b6b34eb16548334ad705318546b533af8a))
+
 ## [2.6.0](https://github.com/hossei-cyber/Devops_Project/compare/webshop-v2.5.0...webshop-v2.6.0) (2026-04-20)
 
 
