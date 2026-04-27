@@ -278,7 +278,8 @@ kubectl get statefulset -n monitoring lgtm-tempo-ingester
 - The additional datasource `TestData` is available in Grafana
 - `lgtm-tempo-ingester` was running with `2/2` replicas
 - The dashboard `Cluster CPU Overview` was provisioned in Grafana
-- It includes a cluster CPU panel and a webshop service CPU panel
+- It includes a cluster CPU panel for overall node usage
+- It includes a webshop service CPU panel for the deployed webshop workload
 
 ### Screenshots
 
@@ -296,7 +297,7 @@ Tempo replica count:
 
 Provisioned dashboard:
 
-![Grafana dashboard Cluster CPU Overview](screenshots/cpu_cluster_overview.png)
+![Grafana dashboard Cluster CPU Overview with cluster and webshop service CPU panels](screenshots/cpu_cluster_overview.png)
 
 ---
 
