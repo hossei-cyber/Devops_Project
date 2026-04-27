@@ -278,6 +278,7 @@ kubectl get statefulset -n monitoring lgtm-tempo-ingester
 - The additional datasource `TestData` is available in Grafana
 - `lgtm-tempo-ingester` was running with `2/2` replicas
 - The dashboard `Cluster CPU Overview` was provisioned in Grafana
+- It includes a cluster CPU panel and a webshop service CPU panel
 
 ### Screenshots
 
@@ -335,7 +336,7 @@ For this task, OpenTofu was used to provision Azure infrastructure for the websh
 ```bash
 az login
 
-cd iac
+cd infra/azure
 tofu init
 tofu validate
 tofu plan

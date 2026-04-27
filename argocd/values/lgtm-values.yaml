@@ -77,12 +77,73 @@ grafana:
                 },
                 "targets": [
                   {
-                    "expr": "100 * sum(rate(node_cpu_seconds_total{mode!=\"idle\"}[5m])) / sum(machine_cpu_cores)",
+                    "expr": "100 * sum(rate(node_cpu_seconds_total{mode!=\"idle\"}[5m])) / scalar(sum(machine_cpu_cores))",
                     "legendFormat": "Cluster CPU",
                     "refId": "A"
                   }
                 ],
                 "title": "Cluster CPU Usage",
+                "type": "stat"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prom"
+                },
+                "fieldConfig": {
+                  "defaults": {
+                    "max": 100,
+                    "min": 0,
+                    "thresholds": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "green",
+                          "value": null
+                        },
+                        {
+                          "color": "orange",
+                          "value": 70
+                        },
+                        {
+                          "color": "red",
+                          "value": 90
+                        }
+                      ]
+                    },
+                    "unit": "percent"
+                  },
+                  "overrides": []
+                },
+                "gridPos": {
+                  "h": 8,
+                  "w": 12,
+                  "x": 12,
+                  "y": 0
+                },
+                "id": 2,
+                "options": {
+                  "colorMode": "value",
+                  "graphMode": "area",
+                  "justifyMode": "center",
+                  "orientation": "auto",
+                  "reduceOptions": {
+                    "calcs": [
+                      "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                  },
+                  "textMode": "value_and_name"
+                },
+                "targets": [
+                  {
+                    "expr": "100 * sum by (service) (label_replace(rate(container_cpu_usage_seconds_total{namespace=\"webshop-prod\"}[5m]), \"service\", \"$1\", \"pod\", \"^(prod-(auth|product|checkout)-service)-.*$\")) / scalar(sum(machine_cpu_cores))",
+                    "legendFormat": "{{service}}",
+                    "refId": "A"
+                  }
+                ],
+                "title": "Webshop Service CPU Usage",
                 "type": "stat"
               }
             ],
@@ -116,8 +177,10 @@ grafana:
         - name: Prometheus-K8s
           uid: prom
           type: prometheus
-          url: http://{{ .Release.Name }}-mimir-nginx/prometheus
+          access: proxy
+          url: http://monitoring-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090
           isDefault: true
+          editable: false
         - name: TestData
           uid: testdata
           type: testdata
